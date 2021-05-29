@@ -1,0 +1,12 @@
+/Users/baylak/d01/d01_ex00/bin/Debug/netcoreapp3.1/d01.deps.json
+/Users/baylak/d01/d01_ex00/bin/Debug/netcoreapp3.1/d01.runtimeconfig.json
+/Users/baylak/d01/d01_ex00/bin/Debug/netcoreapp3.1/d01.runtimeconfig.dev.json
+/Users/baylak/d01/d01_ex00/bin/Debug/netcoreapp3.1/d01.dll
+/Users/baylak/d01/d01_ex00/bin/Debug/netcoreapp3.1/d01.pdb
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.csprojAssemblyReference.cache
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.AssemblyInfoInputs.cache
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.AssemblyInfo.cs
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.csproj.CoreCompileInputs.cache
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.dll
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.pdb
+/Users/baylak/d01/d01_ex00/obj/Debug/netcoreapp3.1/d01.genruntimeconfig.cache
