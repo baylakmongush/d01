@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace d01_ex00
 {
@@ -7,7 +8,7 @@ namespace d01_ex00
 		private static string		_ratesDirectory;
 		private static string		_sum;
 		private	static Exchanger	_exchanger;
-		private static float		sumNum;
+		private static double		sumNum;
 		private static string		id;
 	
 		static void	Init(string sum, string ratesDirectory)
@@ -18,9 +19,9 @@ namespace d01_ex00
 			_exchanger = new Exchanger(_ratesDirectory, sumNum, id);
 		}
 
-		static private void	ParseValues(out float sumNum, out string id)
+		static private void	ParseValues(out double sumNum, out string id)
 		{
-			if (!float.TryParse(_sum.Split(' ')[0], out sumNum))
+			if (!double.TryParse(_sum.Split(' ')[0], out sumNum))
 			{
 				Console.WriteLine("Введите корректную сумму!");
 				Environment.Exit(-1);
@@ -33,9 +34,11 @@ namespace d01_ex00
 			}
 		}
 
-		static void Printer()
+		static void Printer(Dictionary<string, double> result)
 		{
 			Console.WriteLine($"Сумма в исходной валюте: { String.Format("{0:0.00}", sumNum) } {id}");
+			foreach (KeyValuePair<string, double> res in result)
+				Console.WriteLine($"Сумма в { res.Key }: { String.Format("{0:0.00}", res.Value) } {res.Key}");
 		}
 	
         static void Main(string[] args)
@@ -43,8 +46,8 @@ namespace d01_ex00
             if (args.Length == 2)
 			{
 				Init(args[0], args[1]);
-				Printer();
-
+				Dictionary<string, double> result = _exchanger.Parse();
+				Printer(result);
 			}
 			else
 				Console.WriteLine("Слишком много аргументов!");

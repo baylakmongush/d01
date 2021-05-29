@@ -9,9 +9,9 @@ namespace Models
 		public struct Sum
 		{
 			public string	id;
-			public float	sum;
+			public double	sum;
 		}
-        public ExchangeSum(string id, float sum)
+        public ExchangeSum(string id, double sum)
 		{
 			sumStruct.id = id;
 			sumStruct.sum = sum;
