@@ -67,6 +67,10 @@ namespace Events
 				}
 				tmp.stateTask = state;
 				_eventLogger[index] = tmp;
+				if (state == "Done")
+					Console.WriteLine($"Задача [{title}] выполнена!");
+				if (state == "WontDo")
+					Console.WriteLine($"Задача [{title}] больше не актуальна!");
 			}
 			else
 			{
