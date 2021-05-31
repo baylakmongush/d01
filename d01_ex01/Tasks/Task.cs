@@ -1,5 +1,5 @@
 using System;
-
+using Events;
 
 namespace Tasks
 {
@@ -10,8 +10,10 @@ namespace Tasks
 		private DateTime?	_dueDate = null;
 		private TasksType.Type? _taskType = null;
 		private TaskPriority.Priority? _taskPriority = null;
+		private string	_state;
 		
 		private	string _command;
+		private TaskState _taskState = new TaskState();
 
 		public string Command
 		{
@@ -47,19 +49,25 @@ namespace Tasks
 			get => _dueDate;
 		}
 
-		private void	Add()
+		public string State
+		{
+			set => _state = value;
+			get => _state;
+		}
+
+		private void	Add(EventProcessor eventProcessor)
 		{
 			Console.WriteLine("Введите заголовок");
-			Title = Console.ReadLine();
+			Title = Console.ReadLine().Trim();
 			if (Title == "")
 			{
 				Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
-				Quit();
+				return ;
 			}
 			Console.WriteLine("Введите описание");
-			Summary = Console.ReadLine();
+			Summary = Console.ReadLine().Trim();
 			Console.WriteLine("Введите срок");
-			string data = Console.ReadLine();
+			string data = Console.ReadLine().Trim();
 			if (data != "")
 			{
 				bool success = DateTime.TryParse(data, out DateTime time);
@@ -68,54 +76,69 @@ namespace Tasks
 				else
 				{
 					Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
-					Quit();
+					return ;
 				}
 			}
+			else
+			{
+				DueDate = null;
+			}
 			Console.WriteLine("Введите тип");
-			string type = Console.ReadLine();
+			string type = Console.ReadLine().Trim();
 			if (type != "Work" && type != "Study" && type != "Personal")
 			{
 				Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
-				Quit();
+				return ;
 			}
 			else
 			{
-				Type = type == "Work" ? TasksType.Type.Work : null;
-				Type = type == "Study" ? TasksType.Type.Study : null;
-				Type = type == "Personal" ? TasksType.Type.Personal : null;
+				Type = type == "Work" ? TasksType.Type.Work : Type;
+				Type = type == "Study" ? TasksType.Type.Study : Type;
+				Type = type == "Personal" ? TasksType.Type.Personal : Type;
 			}
 			Console.WriteLine("Введите приоритет");
-			string priority = Console.ReadLine();
+			string priority = Console.ReadLine().Trim();
 			
 			if (priority == "" || priority == "Low" || priority == "Normal" || priority == "High")
 			{
-				Priority = priority == "" ? TaskPriority.Priority.Normal : null;
-				Priority = priority == "Low" ? TaskPriority.Priority.Low : null;
-				Priority = priority == "Normal" ? TaskPriority.Priority.Normal : null;
-				Priority = priority == "High" ? TaskPriority.Priority.High : null;
+				Priority = priority == "" ? TaskPriority.Priority.Normal : Priority;
+				Priority = priority == "Low" ? TaskPriority.Priority.Low : Priority;
+				Priority = priority == "Normal" ? TaskPriority.Priority.Normal : Priority;
+				Priority = priority == "High" ? TaskPriority.Priority.High : Priority;
 			}
 			else
 			{
 				Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
-				Quit();
+				return ;
 			}
-
-
+			State = _taskState.New();
+			eventProcessor.tasks.title = Title;
+			eventProcessor.tasks.summary = Summary;
+			eventProcessor.tasks.dueDate = DueDate;
+			eventProcessor.tasks.taskType = Type;
+			eventProcessor.tasks.taskPriority = Priority;
+			eventProcessor.tasks.stateTask = State;
+			eventProcessor.ProcessEvent();
+			eventProcessor.Print(eventProcessor.GetLast());
 		}
 
-		private void	List()
+		private void	List(EventProcessor eventProcessor)
 		{
-
+			eventProcessor.PrintEventLogEntries();
 		}
 
-		private void	Done()
+		private void	Done(EventProcessor eventProcessor)
 		{
-
+			State = _taskState.Done();
+			string title = Console.ReadLine();
+			eventProcessor.GetByTitle(title, State, Command);
 		}
 
-		private void	WontDo()
+		private void	WontDo(EventProcessor eventProcessor)
 		{
-
+			State = _taskState.WontDo();
+			string title = Console.ReadLine();
+			eventProcessor.GetByTitle(title, State, Command);
 		}
 
 		private void	Quit()
@@ -123,21 +146,21 @@ namespace Tasks
 			Environment.Exit(0);
 		}
 
-		public void Commands()
+		public void Commands(EventProcessor eventProcessor)
 		{
 			switch (Command)
 			{
 				case "add" :
-							Add();
+							Add(eventProcessor);
 							break ;
 				case "list" :
-							List();
+							List(eventProcessor);
 							break ;
 				case "done" : 
-							Done();
+							Done(eventProcessor);
 							break ;
 				case "wontdo" :
-							WontDo();
+							WontDo(eventProcessor);
 							break ;
 				case "quit" :
 							Quit();

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Events;
 using Tasks;
 
 namespace d01_ex01
@@ -7,6 +7,7 @@ namespace d01_ex01
     class Program
     {
 		private static Task	_task;
+		private static EventProcessor _eventProcessor;
 		private static bool TaskCommand(string command)
 		{
 			return (command == "add" || command == "list" || 
@@ -16,19 +17,19 @@ namespace d01_ex01
         private static void Main(string[] args)
         {
 			_task = new Task();
+			_eventProcessor = new EventProcessor();
 			while (true)
 			{
 				Console.Write("> ");
-				string command = Console.ReadLine();
+				string command = Console.ReadLine().Trim();
 				if (TaskCommand(command))
 				{
 					_task.Command = command;
-					_task.Commands();
+					_task.Commands(_eventProcessor);
 				}
 				else
 				{
 					Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
-					Environment.Exit(-1);
 				}
 			}
         }
