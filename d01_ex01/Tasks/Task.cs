@@ -131,6 +131,11 @@ namespace Tasks
 		{
 			State = _taskState.Done();
 			string title = Console.ReadLine();
+			if (title == "")
+			{
+				Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
+				return ;
+			}
 			eventProcessor.GetByTitle(title, State, Command);
 		}
 
@@ -138,6 +143,11 @@ namespace Tasks
 		{
 			State = _taskState.WontDo();
 			string title = Console.ReadLine();
+			if (title == "")
+			{
+				Console.WriteLine("Ошибка ввода. Проверьте входные данные и повторите запрос.");
+				return ;
+			}
 			eventProcessor.GetByTitle(title, State, Command);
 		}
 
